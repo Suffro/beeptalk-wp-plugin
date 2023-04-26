@@ -26,8 +26,6 @@ function beeptalk_widget_settings_page() {
 add_action('admin_init', 'register_beeptalk_widget_settings');
 function register_beeptalk_widget_settings() {
     register_setting('beeptalk-widget-settings-group', 'beeptalk_project_id');
-    register_setting('beeptalk-widget-settings-group', 'use_dark_icon');
-    register_setting('beeptalk-widget-settings-group', 'primary_color');
     register_setting('beeptalk-widget-settings-group', 'beeptalk_agent');
 }
 
@@ -41,19 +39,11 @@ function beeptalk_widget_settings_page_callback() {
             <?php do_settings_sections('beeptalk-widget-settings-group'); ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row">Beeptalk project ID *</th>
+                    <th scope="row">Beeptalk project ID</th>
                     <td><input type="text" name="beeptalk_project_id" value="<?php echo esc_attr(get_option('beeptalk_project_id')); ?>" required /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row">Use dark Icon</th>
-                    <td><input type="checkbox" name="use_dark_icon" <?php checked( get_option('use_dark_icon'), 'on' ); ?> /></td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row">Primary Color</th>
-                    <td><input type="color" name="primary_color" value="<?php echo esc_attr(get_option('primary_color')); ?>" /></td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row">Force agent (by email)</th>
+                    <th scope="row">Force agent email (optional)</th>
                     <td><input type="text" name="beeptalk_agent" value="<?php echo esc_attr(get_option('beeptalk_agent')); ?>" /></td>
                 </tr>
             </table>
@@ -75,8 +65,6 @@ function insert_beeptalk_widget_script() {
             $cookie = $_COOKIE['wordpress_logged_in_'];
             $suid = substr($cookie, 0, 64);
         }
-        $dark_icon = get_option('use_dark_icon') ? 'true' : 'false';
-        $primary_color = get_option('primary_color') ? get_option('primary_color') : '';
         $agent = get_option('beeptalk_agent');
         
         echo '<script src="https://cdn.jsdelivr.net/gh/beeptalk-app/beeptalk-widget@latest/index.min.js"></script>';
@@ -92,10 +80,6 @@ function insert_beeptalk_widget_script() {
         if (!empty($user_first_name) && !is_null($user_first_name) && isset($user_first_name)) {
             echo "uname: '$user_first_name',";
         }
-        if (!empty($dark_icon) && !is_null($dark_icon) && isset($dark_icon)) {
-            echo "darkIcon: $dark_icon,";
-        }
-        echo "primaryColor: '$primary_color',";
         if (!empty($agent) && !is_null($agent) && isset($agent)) {
             echo "agent: '$agent',";
         }
